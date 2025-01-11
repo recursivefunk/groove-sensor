@@ -1,0 +1,19 @@
+{
+  "name": "motion-music",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Johnny Austin <hi@johnny.email>",
+  "license": "MIT",
+  "description": "",
+  "dependencies": {
+    "@inquirer/prompts": "^7.2.1",
+    "good-env": "^7.1.1",
+    "got": "^14.4.5",
+    "pretty-print": "^2.0.0",
+    "sonos": "^1.14.1",
+    "terminal-image": "^3.1.1"
+  }
+}

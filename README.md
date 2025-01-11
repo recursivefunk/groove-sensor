@@ -1,0 +1,2 @@
+
+I have a newly rentovated guest bathroom in my home. The plan is to setup a motion detector and put a sonos speaker in there. When someone enters the bathroom to handle business, they'll hear music based on a vibe I've chosen ahead of time.
