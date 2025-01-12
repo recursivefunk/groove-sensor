@@ -22,6 +22,9 @@ const {
 
   system.useDevice(node.device);
 
+  // When we sense motion, if the current device isn't already playing, start playing the randomly chosen
+  // track and print the album info in the terminal. Then take the remaining tracks and add them to the
+  // queue.
   sensor.on('motion_start', async () => {
     log.debug('Motion started');
     if (!isPlaying) {
@@ -34,6 +37,7 @@ const {
     }
   });
 
+  // When there has been no motion for 90-ish seconds, stop playback
   sensor.on('motion_stop', async () => {
     log.debug('Motion stopped');
     await system.stopPlayback();

@@ -4,8 +4,8 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "semistandard src/index.js",
-    "format": "semistandard --fix src/"
+    "lint": "semistandard src/**/*.js",
+    "format": "semistandard --fix src/**/*.js"
   },
   "author": "Johnny Austin <hi@johnny.email>",
   "license": "MIT",
