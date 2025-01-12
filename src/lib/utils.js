@@ -32,11 +32,11 @@ async function chooseSystemNode (system) {
     .map((node) => ({
       name: node.name,
       value: node,
-      checked: false,
+      checked: false
     }));
   const choice = await checkbox({
     message: 'Where do you want to set the mood?',
-    choices,
+    choices
   });
 
   return choice[0];

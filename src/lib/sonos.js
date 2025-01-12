@@ -22,12 +22,12 @@ function init () {
   let _targetDevice;
 
   const _instance = Object.create({
-    useDevice(device) {
+    useDevice (device) {
       _targetDevice = device;
       return this;
     },
 
-    getDevice({ key }) {
+    getDevice ({ key }) {
       if (!_nodes[key]) {
         throw new Error(`Unknown device location '${key}'`);
       }
@@ -35,7 +35,7 @@ function init () {
       return _nodes[key];
     },
 
-    getKnownNodes() {
+    getKnownNodes () {
       return Object.keys(_nodes).map((key) => _nodes[key]);
     },
 

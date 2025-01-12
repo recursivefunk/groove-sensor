@@ -19,7 +19,7 @@ module.exports = {
       // "Dirty Diana" - Michael Jackson
       uri: 'spotify:track:3yBlJtq86wROQpHi1goEKT',
       bestVolume: '25',
-      start: 15,
+      start: 15
     },
     {
       // "Human" - The Human League
