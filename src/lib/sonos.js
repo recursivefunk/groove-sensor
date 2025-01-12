@@ -21,29 +21,16 @@ function init () {
   };
 
   const _instance = Object.create({
-    /* These three methods can be consolidated */
-    getOffice () {
-      if (!nodes.office) {
-        throw new Error('Unknown device location \'office\'');
+    getDevice({ key }) {
+      if (!nodes[key]) {
+        throw new Error(`Unknown device location '${key}'`);
       }
 
-      return nodes.office;
+      return nodes[key];
     },
 
-    getGreatRoom () {
-      if (!nodes.greatRoom) {
-        throw new Error('Unknown device location \'greatRoom\'');
-      }
-
-      return nodes.greatRoom;
-    },
-
-    getPortable () {
-      if (!nodes.portable) {
-        throw new Error('Unknown device location \'portabel\'');
-      }
-
-      return nodes.portable;
+    getKnownNodes() {
+      return Object.keys(nodes).map((key) => nodes[key]);
     },
 
     async clearQueue (device) {
@@ -56,18 +43,17 @@ function init () {
       });
     },
 
-    continuePlayback ({ device }) {
-      return device.play();
-    },
-
-    stopPlayback ({ device }) {
+    stopPlayback (device) {
       return device.stop();
     },
 
-    async playSpotifyTrack ({ device, track: { uri, bestVolume } }) {
+    async playSpotifyTrack ({ device, track: { uri, bestVolume, start } } = { start: 0 }) {
       try {
         await device.setVolume(bestVolume || '20');
         await device.play(uri);
+        if (start > 0) {
+          await device.seek(start);
+        }
       } catch (e) {
         console.error(e);
       }

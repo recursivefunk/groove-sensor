@@ -20,6 +20,18 @@ const {
   let nowPlaying;
   let isPlaying = false;
 
+    if (!isPlaying) {
+      nowPlaying = await system.playSpotifyTrack({
+        device: node.device,
+        track
+      });
+      printNowPlaying(nowPlaying);
+      isPlaying = true;
+      // Queue up the remaining tracks
+      const remainingTracks = buildPlayQueue({ tracks: trackChoices, currentTrack: track });
+      await system.queueAll({ tracks: remainingTracks, device: node.device });
+    }
+/*
   sensor.on('motion_start', async () => {
     log.debug('Motion started');
     if (!isPlaying) {
@@ -37,13 +49,13 @@ const {
 
   sensor.on('motion_stop', async () => {
     log.debug('Motion stopped');
-    await system.stopPlayback({ device: node.device });
+    await system.stopPlayback(node.device);
     await system.clearQueue(node.device);
     isPlaying = false;
   });
-
+*/
   process.on('beforeExit', async () => {
-    await system.stopPlayback();
+    await system.stopPlayback(node.device);
   });
 
   log.info('Listening...');

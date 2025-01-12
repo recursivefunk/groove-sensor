@@ -28,13 +28,15 @@ function buildPlayQueue ({ tracks, currentTrack }) {
  * @description Prompt the user to choose which device to setup the playback
  */
 async function chooseSystemNode (system) {
+  const choices = system.getKnownNodes()
+    .map((node) => ({
+      name: node.name,
+      value: node,
+      checked: false,
+    }));
   const choice = await checkbox({
     message: 'Where do you want to set the mood?',
-    choices: [
-      { name: 'Office', value: system.getOffice(), checked: false },
-      { name: 'Great Room', value: system.getGreatRoom(), checked: false },
-      { name: 'Portable', value: system.getPortable(), checked: false }
-    ]
+    choices,
   });
 
   return choice[0];

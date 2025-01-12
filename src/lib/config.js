@@ -16,6 +16,12 @@ module.exports = {
   // @TODO: Consider just making these playlists
   eightiesTrackIds: [
     {
+      // "Dirty Diana" - Michael Jackson
+      uri: 'spotify:track:3yBlJtq86wROQpHi1goEKT',
+      bestVolume: '25',
+      start: 15,
+    },
+    {
       // "Human" - The Human League
       uri: 'spotify:track:537yo062QIz16oQOgxmul3',
       bestVolume: '25'
