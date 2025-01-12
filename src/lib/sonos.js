@@ -1,5 +1,5 @@
 const { Sonos } = require('sonos');
-const { deviceMappings } = require('./config');
+const { sonos: { deviceMappings }} = require('./config');
 
 
 function init() {
@@ -57,8 +57,15 @@ function init() {
       });
     },
 
-    async playSpotifyTrack({ device, track: { uri, bestVolume } }) {
+    continuePlayback({ device }) {
+      return device.play();
+    },
 
+    stopPlayback({ device }) {
+      return device.stop();
+    },
+
+    async playSpotifyTrack({ device, track: { uri, bestVolume } }) {
       if (!device) {
         throw new Error('Unknown device location %j', location);
       }
