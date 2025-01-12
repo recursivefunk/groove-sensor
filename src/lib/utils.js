@@ -1,15 +1,11 @@
 const { default: terminalImage } = require('terminal-image');
-const print = require('pretty-print');
+const Table = require('cli-table');
 const { got } = require('got');
 const { checkbox } = require('@inquirer/prompts');
 const {
   eightiesTrackIds,
   jazzTrackIds
 } = require('./config');
-const prettyOpts = {
-  leftPadding: 3,
-  rightPadding: 3
-};
 
 /*
  * @description Builds a queue of tracks to play by just returning the current moodlist exluding the current track
@@ -66,11 +62,14 @@ async function printNowPlaying ({ title, artist, album, albumArtURL }) {
   const body = await got(albumArtURL).buffer();
   console.log(await terminalImage.buffer(body, { width: 100 }));
   console.log('\n\n');
-  print({
-    Title: title,
-    Artist: artist,
-    Album: album
-  }, prettyOpts);
+  console.log(
+    new Table({
+      head: ['Title', 'Artist', 'Album'],
+      rows: [
+        [title, artist, album]
+      ]
+    }).toString()
+  );
   console.log('\n\n');
 }
 
