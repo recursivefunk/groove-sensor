@@ -2,7 +2,7 @@ const { Sonos } = require('sonos');
 const { sonos: { deviceMappings } } = require('./config');
 
 function init () {
-  const nodes = {
+  const _nodes = {
     office: {
       name: 'Office',
       device: new Sonos(deviceMappings.office),
@@ -19,35 +19,42 @@ function init () {
       ip: deviceMappings.portable
     }
   };
+  let _targetDevice;
 
   const _instance = Object.create({
+    useDevice(device) {
+      _targetDevice = device;
+      return this;
+    },
+
     getDevice({ key }) {
-      if (!nodes[key]) {
+      if (!_nodes[key]) {
         throw new Error(`Unknown device location '${key}'`);
       }
 
-      return nodes[key];
+      return _nodes[key];
     },
 
     getKnownNodes() {
-      return Object.keys(nodes).map((key) => nodes[key]);
+      return Object.keys(_nodes).map((key) => _nodes[key]);
     },
 
-    async clearQueue (device) {
-      await device.flush();
+    async clearQueue () {
+      await _targetDevice.flush();
     },
 
-    async queueAll ({ device, tracks }) {
+    async queueAll (tracks) {
       tracks.forEach(async ({ uri }) => {
-        await device.queue(uri);
+        await _targetDevice.queue(uri);
       });
     },
 
-    stopPlayback (device) {
-      return device.stop();
+    stopPlayback () {
+      return _targetDevice.stop();
     },
 
-    async playSpotifyTrack ({ device, track: { uri, bestVolume, start } } = { start: 0 }) {
+    async playSpotifyTrack ({ uri, bestVolume, start } = { start: 0 }) {
+      const device = _targetDevice;
       try {
         await device.setVolume(bestVolume || '20');
         await device.play(uri);
