@@ -1,6 +1,4 @@
-const { default: terminalImage } = require('terminal-image');
-const print = require('pretty-print');
-const { got } = require('got');
+const process = require('node:process');
 const Sonos = require('./lib/sonos');
 const Sensor = require('./lib/sensor')
 const { hue } = require('./lib/config');
@@ -9,34 +7,71 @@ const {
   buildPlayQueue,
   chooseSystemNode,
   chooseVibe,
+  printNowPlaying,
   randomTrack,
 } = require('./lib/utils');
-const prettyOpts = {
-  leftPadding: 3,
-  rightPadding: 3,
-};
 
 (async function() {
-  const sensor = await Sensor({ ...hue });
   const trackChoices = await chooseVibe();
   const track = randomTrack(trackChoices);
   const system = Sonos();
   const node = await chooseSystemNode(system);
+  const sensor = await Sensor({ ...hue });
   let nowPlaying;
+  let isPlaying = false;
 
   sensor.on('motion_start', async () => {
     log.debug('Motion started');
-    const nowPlaying = await system.playSpotifyTrack({
-      device: node.device,
-      track,
-    });
+    if (!isPlaying) {
+      nowPlaying = await system.playSpotifyTrack({
+        device: node.device,
+        track,
+      });
+      printNowPlaying(nowPlaying);
+      isPlaying = true;
+      // Queue up the remaining tracks
+      const remainingTracks = buildPlayQueue({ tracks: trackChoices, currentTrack: track });
+      await system.queueAll({ tracks: remainingTracks, device: node.device });
+    }
   });
 
-  sensor.on('motion_stop', () => {
+  sensor.on('motion_stop', async () => {
     log.debug('Motion stopped');
-    system.stopPlayback({ device: node.device });
+    await system.stopPlayback({ device: node.device });
+    await system.clearQueue(node.device);
+    isPlaying = false;
+  });
+
+  process.on('beforeExit', async () => {
+    await system.stopPlayback();
   });
 
   log.info('Listening...');
-  
 }());
+/*
+(async function () {
+  const trackChoices = await chooseVibe();
+  const track = randomTrack(trackChoices);
+  const system = Sonos();
+  const node = await chooseSystemNode(system);
+  const nowPlaying = await system.playSpotifyTrack({
+    device: node.device,
+    track,
+  });
+
+  // Queue up the remaining tracks
+  const remainingTracks = buildPlayQueue({ tracks: trackChoices, currentTrack: track });
+  await system.queueAll({ tracks: remainingTracks, device: node.device });
+
+  // Not sure I'm bothering to do this no one will see it but me
+  const body = await got(nowPlaying.albumArtURL).buffer();
+  console.log(await terminalImage.buffer(body, { width: 100 }));
+  console.log('\n');
+  print({
+    Title: nowPlaying.title,
+    Artist: nowPlaying.artist,
+    Album: nowPlaying.album,
+  }, prettyOpts);
+  console.log('\n\n');
+}());
+*/

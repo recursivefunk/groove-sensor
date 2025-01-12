@@ -1,8 +1,15 @@
+const { default: terminalImage } = require('terminal-image');
+const print = require('pretty-print');
+const { got } = require('got');
 const { checkbox } = require('@inquirer/prompts');
 const {
   eightiesTrackIds,
   jazzTrackIds,
 } = require('./config');
+const prettyOpts = {
+  leftPadding: 3,
+  rightPadding: 3,
+};
 
 /*
  * @description Builds a queue of tracks to play by just returning the current moodlist exluding the current track
@@ -53,6 +60,18 @@ async function chooseVibe() {
   return choice[0];
 }
 
+async function printNowPlaying({ title, artist, album, albumArtURL }) {
+  const body = await got(albumArtURL).buffer();
+  console.log(await terminalImage.buffer(body, { width: 100 }));
+  console.log('\n\n');
+  print({
+    Title: title,
+    Artist: artist,
+    Album: album,
+  }, prettyOpts);
+  console.log('\n\n');
+}
+
 function randomTrack(items) {
   return items[Math.floor(Math.random()*items.length)];
 }
@@ -61,5 +80,6 @@ module.exports = {
   buildPlayQueue,
   chooseSystemNode,
   chooseVibe,
+  printNowPlaying,
   randomTrack,
 };

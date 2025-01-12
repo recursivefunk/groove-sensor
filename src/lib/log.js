@@ -1,5 +1,5 @@
 const env = require('good-env');
-const isProd = env === 'PRODUCTION';
+const isProd = env.get('NODE_ENV') === 'PRODUCTION';
 const noOp = function(){};
 
 module.exports = {
