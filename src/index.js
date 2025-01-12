@@ -1,6 +1,6 @@
 const process = require('node:process');
 const Sonos = require('./lib/sonos');
-const Sensor = require('./lib/sensor')
+const Sensor = require('./lib/sensor');
 const { hue } = require('./lib/config');
 const log = require('./lib/log');
 const {
@@ -8,10 +8,10 @@ const {
   chooseSystemNode,
   chooseVibe,
   printNowPlaying,
-  randomTrack,
+  randomTrack
 } = require('./lib/utils');
 
-(async function() {
+(async function () {
   const trackChoices = await chooseVibe();
   const track = randomTrack(trackChoices);
   const system = Sonos();
@@ -25,7 +25,7 @@ const {
     if (!isPlaying) {
       nowPlaying = await system.playSpotifyTrack({
         device: node.device,
-        track,
+        track
       });
       printNowPlaying(nowPlaying);
       isPlaying = true;
@@ -48,30 +48,3 @@ const {
 
   log.info('Listening...');
 }());
-/*
-(async function () {
-  const trackChoices = await chooseVibe();
-  const track = randomTrack(trackChoices);
-  const system = Sonos();
-  const node = await chooseSystemNode(system);
-  const nowPlaying = await system.playSpotifyTrack({
-    device: node.device,
-    track,
-  });
-
-  // Queue up the remaining tracks
-  const remainingTracks = buildPlayQueue({ tracks: trackChoices, currentTrack: track });
-  await system.queueAll({ tracks: remainingTracks, device: node.device });
-
-  // Not sure I'm bothering to do this no one will see it but me
-  const body = await got(nowPlaying.albumArtURL).buffer();
-  console.log(await terminalImage.buffer(body, { width: 100 }));
-  console.log('\n');
-  print({
-    Title: nowPlaying.title,
-    Artist: nowPlaying.artist,
-    Album: nowPlaying.album,
-  }, prettyOpts);
-  console.log('\n\n');
-}());
-*/

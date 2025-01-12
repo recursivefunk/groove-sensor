@@ -4,17 +4,17 @@ const { got } = require('got');
 const { checkbox } = require('@inquirer/prompts');
 const {
   eightiesTrackIds,
-  jazzTrackIds,
+  jazzTrackIds
 } = require('./config');
 const prettyOpts = {
   leftPadding: 3,
-  rightPadding: 3,
+  rightPadding: 3
 };
 
 /*
  * @description Builds a queue of tracks to play by just returning the current moodlist exluding the current track
  */
-function buildPlayQueue({ tracks, currentTrack }) {
+function buildPlayQueue ({ tracks, currentTrack }) {
   const remainingTracks = tracks.filter((t) => t.uri !== currentTrack.uri);
 
   if (remainingTracks.length === 0) {
@@ -27,14 +27,14 @@ function buildPlayQueue({ tracks, currentTrack }) {
 /*
  * @description Prompt the user to choose which device to setup the playback
  */
-async function chooseSystemNode(system) {
+async function chooseSystemNode (system) {
   const choice = await checkbox({
     message: 'Where do you want to set the mood?',
     choices: [
       { name: 'Office', value: system.getOffice(), checked: false },
       { name: 'Great Room', value: system.getGreatRoom(), checked: false },
-      { name: 'Portable', value: system.getPortable(), checked: false },
-    ],
+      { name: 'Portable', value: system.getPortable(), checked: false }
+    ]
   });
 
   return choice[0];
@@ -48,32 +48,32 @@ async function chooseSystemNode(system) {
  *  3. Right click on the track
  *  4. Choose 'Share > Copy Song Link' and the track ID will be embedded in the link. Be sure to format it correctly when you paste it in the config
  */
-async function chooseVibe() {
+async function chooseVibe () {
   const choice = await checkbox({
     message: 'Aw yea! What type of mood would you like to set?',
     choices: [
       { name: 'Jazzy', value: jazzTrackIds, checked: false },
-      { name: '80s', value: eightiesTrackIds, checked: false },
-    ],
+      { name: '80s', value: eightiesTrackIds, checked: false }
+    ]
   });
 
   return choice[0];
 }
 
-async function printNowPlaying({ title, artist, album, albumArtURL }) {
+async function printNowPlaying ({ title, artist, album, albumArtURL }) {
   const body = await got(albumArtURL).buffer();
   console.log(await terminalImage.buffer(body, { width: 100 }));
   console.log('\n\n');
   print({
     Title: title,
     Artist: artist,
-    Album: album,
+    Album: album
   }, prettyOpts);
   console.log('\n\n');
 }
 
-function randomTrack(items) {
-  return items[Math.floor(Math.random()*items.length)];
+function randomTrack (items) {
+  return items[Math.floor(Math.random() * items.length)];
 }
 
 module.exports = {
@@ -81,5 +81,5 @@ module.exports = {
   chooseSystemNode,
   chooseVibe,
   printNowPlaying,
-  randomTrack,
+  randomTrack
 };

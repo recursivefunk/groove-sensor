@@ -1,29 +1,28 @@
 const { Sonos } = require('sonos');
-const { sonos: { deviceMappings }} = require('./config');
+const { sonos: { deviceMappings } } = require('./config');
 
-
-function init() {
+function init () {
   const nodes = {
     office: {
       name: 'Office',
       device: new Sonos(deviceMappings.office),
-      ip: deviceMappings.office,
+      ip: deviceMappings.office
     },
     greatRoom: {
       name: 'Great Room',
       device: new Sonos(deviceMappings.greatRoom),
-      ip: deviceMappings.greatRoom,
+      ip: deviceMappings.greatRoom
     },
     portable: {
       name: 'Portable',
       device: new Sonos(deviceMappings.portable),
-      ip: deviceMappings.portable,
+      ip: deviceMappings.portable
     }
   };
 
   const _instance = Object.create({
     /* These three methods can be consolidated */
-    getOffice() {
+    getOffice () {
       if (!nodes.office) {
         throw new Error('Unknown device location \'office\'');
       }
@@ -31,7 +30,7 @@ function init() {
       return nodes.office;
     },
 
-    getGreatRoom() {
+    getGreatRoom () {
       if (!nodes.greatRoom) {
         throw new Error('Unknown device location \'greatRoom\'');
       }
@@ -39,7 +38,7 @@ function init() {
       return nodes.greatRoom;
     },
 
-    getPortable() {
+    getPortable () {
       if (!nodes.portable) {
         throw new Error('Unknown device location \'portabel\'');
       }
@@ -47,29 +46,25 @@ function init() {
       return nodes.portable;
     },
 
-    async clearQueue(device) {
+    async clearQueue (device) {
       await device.flush();
     },
 
-    async queueAll({ device, tracks }) {
+    async queueAll ({ device, tracks }) {
       tracks.forEach(async ({ uri }) => {
         await device.queue(uri);
       });
     },
 
-    continuePlayback({ device }) {
+    continuePlayback ({ device }) {
       return device.play();
     },
 
-    stopPlayback({ device }) {
+    stopPlayback ({ device }) {
       return device.stop();
     },
 
-    async playSpotifyTrack({ device, track: { uri, bestVolume } }) {
-      if (!device) {
-        throw new Error('Unknown device location %j', location);
-      }
-
+    async playSpotifyTrack ({ device, track: { uri, bestVolume } }) {
       try {
         await device.setVolume(bestVolume || '20');
         await device.play(uri);

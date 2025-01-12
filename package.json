@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "semistandard src/index.js",
+    "format": "semistandard --fix src/"
   },
   "author": "Johnny Austin <hi@johnny.email>",
   "license": "MIT",
@@ -16,5 +18,10 @@
     "pretty-print": "^2.0.0",
     "sonos": "^1.14.1",
     "terminal-image": "^3.1.1"
+  },
+  "devDependencies": {
+    "nyc": "15.1.0",
+    "tape": "5.5.3",
+    "semistandard": "*"
   }
 }
