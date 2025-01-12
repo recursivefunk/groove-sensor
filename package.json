@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "nyc": "15.1.0",
-    "tape": "5.5.3",
-    "semistandard": "*"
+    "semistandard": "*",
+    "tape": "5.5.3"
   }
 }

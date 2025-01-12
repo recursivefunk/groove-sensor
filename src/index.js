@@ -41,7 +41,7 @@ const {
     isPlaying = false;
   });
 
-  process.on('beforeExit', async () => {
+  process.on('exit', async () => {
     await system.stopPlayback();
   });
 
