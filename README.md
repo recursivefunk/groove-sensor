@@ -2,10 +2,13 @@
 
 ![alt text](./img/groove-sensor-logo.svg)
 <p align="center">
-  <img src="./img/sonos-hue.png" alt="sonos-hue" width="400"/>
+  <img src="./img/logos.png" alt="sonos-hue" width="400"/>
 </p>
 
-To hook this up, you'll need a Sonos speaker hooked up to your wifi and a Hue Philips motion sensor. To get the motion sensor working you'll also need a Hue Philips bridge and motion sensor setup. Both the Hue and Sonos systems should be connected to the same wifi network. This app runs locally on your network, so it's not really meant to run indefinitely unless you have maybe a dedicated box or run this in a container in the background. I don't plan on doing that, but if you want to make a PR to enable that, I'd welcome the contribution.
+To hook this up, you'll need a Sonos speaker hooked up to your wifi and a Hue Philips motion sensor. To get the motion sensor working you'll also need a Hue Philips bridge and motion sensor setup. Both the Hue and Sonos systems should be connected to the same wifi network. This app runs locally on your network, so it's not really meant to run indefinitely unless you have maybe a dedicated box or run this in a container in the background. I don't plan on doing that, but if you want to make a PR to enable that, I'd welcome the contribution. Lastly, I recommend syncing your Spotify and Sonos accounts. More on Spotify below.
+
+## Spotify
+The tracks in the track list found in `src/lib/config.js` are Spotify URIs. Based on the Sonos JS library, this can also be an arbitrary MP3 file. I'm sure there are other options as well, but I haven't tested any of them. The working assumption is that your Sonos and Spotify accounts are linked and that you're using Spotify URIs. The integration between those services is pretty good and I recommend connecting them regardless of what you do with this software.
 
 ## Helper Scripts and Setup
 ### Sonos Devices
