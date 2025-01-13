@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200">
+  <!-- Background radar ping animation -->
+  <circle cx="200" cy="100" r="80" fill="none" stroke="#6366f1" stroke-width="2">
+    <animate attributeName="r" from="0" to="80" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" from="1" to="0" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Sound wave circles -->
+  <circle cx="200" cy="100" r="60" fill="none" stroke="#818cf8" stroke-width="4">
+    <animate attributeName="r" values="55;65;55" dur="1s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="200" cy="100" r="40" fill="none" stroke="#818cf8" stroke-width="4">
+    <animate attributeName="r" values="35;45;35" dur="1s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="200" cy="100" r="20" fill="none" stroke="#818cf8" stroke-width="4">
+    <animate attributeName="r" values="15;25;15" dur="1s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Center musical note -->
+  <path d="M200 70 L200 110 Q200 120 190 120 Q180 120 180 110 Q180 100 190 100 Q195 100 200 102" 
+        fill="none" stroke="#312e81" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="180" cy="110" rx="8" ry="6" fill="#312e81"/>
+  
+  <!-- Text -->
+  <text x="200" y="160" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#312e81">
+    GROOVE SENSOR
+  </text>
+</svg>
