@@ -24,12 +24,14 @@ function buildPlayQueue ({ tracks, currentTrack }) {
  * @description Prompt the user to choose which device to setup the playback
  */
 async function chooseSystemNode (system) {
-  const choices = system.getKnownNodes()
+  const discoveredNodes = await system.discoverNodes();
+  const choices = discoveredNodes
     .map((node) => ({
       name: node.name,
       value: node,
       checked: false
     }));
+
   const choice = await checkbox({
     message: 'Where do you want to set the mood?',
     choices
@@ -77,8 +79,19 @@ function randomTrack (items) {
   return items[Math.floor(Math.random() * items.length)];
 }
 
+const camelize = (str) => {
+  return str.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
+    return index === 0 ? word.toLowerCase() : word.toUpperCase();
+  })
+  .replace(/\s+/g, '')
+  .replace(/'/g, '')
+  .replace(/’/g, '');
+}
+
+
 module.exports = {
   buildPlayQueue,
+  camelize,
   chooseSystemNode,
   chooseVibe,
   printNowPlaying,

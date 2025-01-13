@@ -1,6 +1,7 @@
 const sonos = require('sonos');
 const Table = require('cli-table');
 const jsHue = require('jshue');
+const { error } = require('../src/lib/log');
 const discovery = new sonos.AsyncDeviceDiscovery();
 const hue = jsHue();
 
@@ -44,7 +45,16 @@ async function lsHue() {
 }
 
 async function lsSonos() {
-  const sonosDevices = await discovery.discoverMultiple({ timeout: 5000 });
+  let sonosDevices = [];
+
+  try {
+    sonosDevices = await discovery.discoverMultiple({ timeout: 5000 });
+    console.log(sonosDevices)
+  } catch (e) {
+    if (e.message !== 'No devices found') {
+      error(`\n           ${e.message}\n`)
+    }
+  }
 
   if (sonosDevices.length > 0) {
     console.log(`
@@ -63,6 +73,6 @@ async function lsSonos() {
     });
     console.log(sonosTable.toString());
   } else {
-    console.log(`           No Sonos Devices Found\n`)
+    console.log(`\n           No Sonos Devices Found\n`)
   }
 }

@@ -11,13 +11,13 @@ To hook this up, you'll need a Sonos speaker hooked up to your wifi and a Hue Ph
 
 ## Helper Scripts and Setup
 ### Sonos Devices
-There's a script in `scripts/discover-devices.js` which will list all of the Sonos speakers and their internal IP address so you don't have to dig through the app to get them. Once you see all the devices listed, you'll want to customize `src/lib/config.js`. Specifically, the `sonos > deviceMappings` section where you'll see the Sonos device to IP mappings. Put your values in there.
+There's a script in `scripts/discover-devices.js` which will list all of the Sonos speakers and their internal IP address so you don't have to dig through the app to get them. The app will automatically discover your Sonos devices and let you choose a speaker when you launch it, so this data is purely informational in that you don't need to do anything with it. When the discovery happens, the app builds a Sonos configuration object which has the IP and name.
 
 ### Hue Devices
 For the Hue motion sensors, you'll need to know your bridge IP and username ahead of time. I tried to do a discover option but it doesn't seem to work for me. It's possible the library isn't compatible with the version of the software my bridge is running. I will not dig into this. You can find your bridge's IP by heading into the settings section of the official Hue Philips control app. Next, store the bridge's IP as an environment variable `HUE_BRIDGE_IP`. Then, create a new user. You do this by:
 
 1. Pressing the button on your Hue bridge
-2. Running this code
+2. Running this code (ensure you're connected to the same network as the bridge)
 
 ```javascript
 const jsHue = require('jshue');
@@ -43,9 +43,9 @@ The result should be something like this:
 
 | Environment Variable    | Type    | Description                                        | Required | Default |
 | :---------------------- | :------ | :------------------------------------------------- | :------: | :-----: |
-| SONOS_{{location}}_IP   | String  | IP Address of at least one of your Sonos speakers  | Yes      ||
+| SONOS_DISCOVERY_TIMEOUT | String  | Timeout (seconds) for the device discovery process | No       | `5`     |
 | HUE_BRIDGE_IP           | String  | IP Address of your Hugh Philips bridge device      | Yes      ||
 | HUE_USERNAME            | String  | Newly created username to connect to the bridge    | Yes      ||
 | HUE_SENSOR_ID           | String  | Device ID for the target Hue motion sensor         | Yes      ||
-| HUE_MOTION_STOP_BUFFER  | Number  | How long to wait (seconds) after motion stops to emit the `motion_stop` event | No      |`90`|
-| HUE_MOTION_POLLING_INTERVAL | Number  | How long to wait (seconds) in between sensor state polls | No      |`2`|
+| HUE_MOTION_STOP_BUFFER  | Number  | How long to wait (seconds) after motion stops to emit the `motion_stop` event | No |`90`|
+| HUE_MOTION_POLLING_INTERVAL | Number  | How long to wait (seconds) in between sensor state polls | No |`2`|

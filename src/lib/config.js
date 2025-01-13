@@ -1,13 +1,6 @@
 const env = require('good-env');
 
 module.exports = {
-  sonos: {
-    deviceMappings: {
-      office: env.get('SONOS_OFFICE_IP'),
-      greatRoom: env.get('SONOS_GREAT_ROOM_IP'),
-      portable: env.get('SONOS_PORTABLE_IP')
-    }
-  },
   hue: {
     username: env.get('HUE_USERNAME'),
     bridgeIp: env.get('HUE_BRIDGE_IP'),
