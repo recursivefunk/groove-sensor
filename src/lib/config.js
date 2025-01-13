@@ -57,6 +57,38 @@ module.exports = {
   ],
   jazzTrackIds: [
     {
+      // "Misty" - Ella Fitzgerald
+      uri: 'spotify:track:4kF394GKEnI13QdZBM9mxM',
+      bestVolume: 30
+    },
+    {
+      // "Flamenco Sketches" - Miles Davis
+      uri: 'spotify:track:6dRx7OUXfvosnXG3g9lWGi',
+      bestVolume: '30',
+      start: 20
+    },
+    {
+      // "You Are Too Beautiful" - Thelonious Monk
+      uri: 'spotify:track:1fYal59goMHv8Uq9sfNU8k',
+      bestVolume: '30'
+    },
+    {
+      // "When Sunny Gets Blue" - McCoy Tyner
+      uri: 'spotify:track:1J9iVCaEriyoMXpj2XszhU',
+      bestVolume: '30'
+    },
+    {
+      // "Stockholm Love" - Malthilda June
+      uri: 'https://open.spotify.com/track/3tNuzvJ5z4rN7GPZoWxQdk?si=f558bcc70d2f4c7a',
+      bestVolume: '25'
+    },
+    {
+      // "Thanks, But I Don't Dance" - Rene Marie
+      uri: 'spotify:track:0yrwVkQZorFkCICB4jjU3p',
+      bestVolume: '25',
+      start: 16
+    },
+    {
       // "Smooth Talking" - Nocturnal Spirits
       uri: 'spotify:track:2pQ7tvFq7DgkQnJgU2eKia',
       bestVolume: '25'

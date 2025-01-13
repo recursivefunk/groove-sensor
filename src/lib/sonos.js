@@ -36,11 +36,11 @@ function init () {
      * about (on the network). This will just be the node devices configured in config.js
      */
     getKnownNodes () {
-      if (_nodes.length === 0) log.debug('No nodes.')
+      if (Object.keys(_nodes).length === 0) log.debug('No nodes.');
       return Object.keys(_nodes).map((key) => _nodes[key]);
     },
 
-    async discoverNodes() {
+    async discoverNodes () {
       log.info('\n---------- Hold tight, finding your Sonos devices... -------------\n');
       const sonosDevices = await discovery.discoverMultiple({ timeout: sonosDiscoveryTimeout });
       const nodesArr = await Promise.all(sonosDevices.map(async (device) => {
@@ -48,15 +48,15 @@ function init () {
         return {
           name,
           device: new Sonos(device.host),
-          ip: device.host,
-        }
+          ip: device.host
+        };
       }));
 
       _nodes = nodesArr.reduce((accum, item) => {
         const key = camelize(item.name);
         accum[key] = item;
         return accum;
-      }, {})
+      }, {});
 
       return nodesArr;
     },

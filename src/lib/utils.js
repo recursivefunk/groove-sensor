@@ -1,7 +1,7 @@
 const { default: terminalImage } = require('terminal-image');
 const Table = require('cli-table');
 const { got } = require('got');
-const { checkbox } = require('@inquirer/prompts');
+const { select } = require('@inquirer/prompts');
 const {
   eightiesTrackIds,
   jazzTrackIds
@@ -32,12 +32,12 @@ async function chooseSystemNode (system) {
       checked: false
     }));
 
-  const choice = await checkbox({
+  const choice = await select({
     message: 'Where do you want to set the mood?',
     choices
   });
 
-  return choice[0];
+  return choice;
 }
 
 /*
@@ -49,7 +49,7 @@ async function chooseSystemNode (system) {
  *  4. Choose 'Share > Copy Song Link' and the track ID will be embedded in the link. Be sure to format it correctly when you paste it in the config
  */
 async function chooseVibe () {
-  const choice = await checkbox({
+  const choice = await select({
     message: 'Aw yea! What type of mood would you like to set?',
     choices: [
       { name: 'Jazzy', value: jazzTrackIds, checked: false },
@@ -57,7 +57,7 @@ async function chooseVibe () {
     ]
   });
 
-  return choice[0];
+  return choice;
 }
 
 async function printNowPlaying ({ title, artist, album, albumArtURL }) {
@@ -83,11 +83,10 @@ const camelize = (str) => {
   return str.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
     return index === 0 ? word.toLowerCase() : word.toUpperCase();
   })
-  .replace(/\s+/g, '')
-  .replace(/'/g, '')
-  .replace(/’/g, '');
-}
-
+    .replace(/\s+/g, '')
+    .replace(/'/g, '')
+    .replace(/’/g, '');
+};
 
 module.exports = {
   buildPlayQueue,

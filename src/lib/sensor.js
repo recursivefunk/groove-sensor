@@ -11,7 +11,7 @@ const hueMotionPollingInterval = env.num('HUE_MOTION_POLLING_INTERVAL', 2) * 100
  * accordingly. Return an EventEmitter which will be the channel over which the client is notifed of state changes.
  */
 class Sensor extends EventEmitter {
-  constructor({ bridgeIp, sensorId, username }) {
+  constructor ({ bridgeIp, sensorId, username }) {
     super();
     EventEmitter.call(this);
     this._sensorId = sensorId;
@@ -23,8 +23,8 @@ class Sensor extends EventEmitter {
     this._lastMotionStop = null;
   }
 
-  async monitor() {
-    let tempSensor = await this._user.getSensor(this._sensorId);
+  async monitor () {
+    const tempSensor = await this._user.getSensor(this._sensorId);
     this._lastKnownState = await tempSensor.state.presence;
 
     setInterval(async () => {
@@ -57,7 +57,7 @@ class Sensor extends EventEmitter {
         }
       }
     }, hueMotionPollingInterval);
-    return this; 
+    return this;
   }
 }
 module.exports = Sensor;
