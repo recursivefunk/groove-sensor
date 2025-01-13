@@ -5,8 +5,6 @@
   <img src="./img/sonos-hue.png" alt="sonos-hue" width="400"/>
 </p>
 
-I have a newly rentovated guest bathroom in my home. The plan is to setup a motion detector and put a sonos speaker in there. When someone enters the bathroom to handle business, they'll hear music based on a "vibe" (most likely hits from the 80s, sorry kids!) I've chosen ahead of time.
-
 To hook this up, you'll need a Sonos speaker hooked up to your wifi and a Hue Philips motion sensor. To get the motion sensor working you'll also need a Hue Philips bridge and motion sensor setup. Both the Hue and Sonos systems should be connected to the same wifi network. This app runs locally on your network, so it's not really meant to run indefinitely unless you have maybe a dedicated box or run this in a container in the background. I don't plan on doing that, but if you want to make a PR to enable that, I'd welcome the contribution.
 
 ## Helper Scripts and Setup
@@ -49,3 +47,7 @@ The result should be something like this:
 | HUE_SENSOR_ID           | String  | Device ID for the target Hue motion sensor         | Yes      ||
 | HUE_MOTION_STOP_BUFFER  | Number  | How long to wait (seconds) after motion stops to emit the `motion_stop` event | No |`90`|
 | HUE_MOTION_POLLING_INTERVAL | Number  | How long to wait (seconds) in between sensor state polls | No |`2`|
+
+### Why Does This Exist?
+
+I have a newly rentovated guest bathroom in my home. The plan is to setup a motion detector and put a sonos speaker in there. When someone enters the bathroom to handle business, they'll hear music based on a "vibe" (most likely hits from the 80s, sorry kids!) I've chosen ahead of time.
