@@ -1,49 +1,63 @@
 const EventEmitter = require('node:events');
+const env = require('good-env');
 const jsHue = require('jshue');
 const { debug } = require('./log');
 const hue = jsHue();
-
-class SensorEmitter extends EventEmitter {}
+const hueMotionStopBuff = env.num('HUE_MOTION_STOP_BUFFER', 90) * 1000;
+const hueMotionPollingInterval = env.num('HUE_MOTION_POLLING_INTERVAL', 2) * 1000;
 
 /*
  * @description Detect a Hue motion sensor, poll it for chances in presence state and emit motion start or stop
  * accordingly. Return an EventEmitter which will be the channel over which the client is notifed of state changes.
  */
-async function Sensor ({ bridgeIp, sensorId, username }) {
-  const emitter = new SensorEmitter();
-  const bridge = hue.bridge(bridgeIp);
-  const user = bridge.user(username);
-  const tempSensor = await user.getSensor(sensorId);
-  let lastKnownState = await tempSensor.state.presence;
-  let lastMotionStop = null;
+class Sensor extends EventEmitter {
+  constructor({ bridgeIp, sensorId, username }) {
+    super();
+    EventEmitter.call(this);
+    this._sensorId = sensorId;
+    this._bridgeIp = bridgeIp;
+    this._username = username;
+    this._bridge = hue.bridge(this._bridgeIp);
+    this._user = this._bridge.user(this._username);
+    this._lastKnownState = null;
+    this._lastMotionStop = null;
+  }
 
-  // Every two seconds, check for presence state change and emit start or stop. If there's no change, do nothing.
-  setInterval(async () => {
-    const sensor = await user.getSensor(sensorId);
-    const updatedState = sensor.state.presence;
+  async monitor() {
+    let tempSensor = await this._user.getSensor(this._sensorId);
+    this._lastKnownState = await tempSensor.state.presence;
 
-    if (updatedState !== lastKnownState) {
-      lastKnownState = updatedState;
+    setInterval(async () => {
+      let sensor;
+      try {
+        sensor = await this._user.getSensor(this._sensorId);
+      } catch (err) {
+        this.emit('error', err);
+      }
+      const updatedState = sensor.state.presence;
 
-      if (updatedState === true) {
-        debug('Motion detected. Emit motion start.');
-        emitter.emit('motion_start');
+      if (updatedState !== this._lastKnownState) {
+        this._lastKnownState = updatedState;
+
+        if (updatedState === true) {
+          debug('Motion detected. Emit motion start.');
+          this.emit('motion_start');
+        } else {
+          this._lastMotionStop = Date.now();
+        }
       } else {
-        lastMotionStop = Date.now();
+        // The sensor's state reverts to not detecting presence only a few seconds after no motion is detected.
+        // I need it more time to account for the fact that people may enter the room and remain still for an
+        // extended amount of time and we don't want music to stop. For instance, when pooping.
+        // Start with 90 seconds and see how that works.
+        if (this._lastMotionStop && ((Date.now() - this._lastMotionStop) >= hueMotionStopBuff)) {
+          debug('It has been about 90 seconds since motion has stopped. Emit motion stop.');
+          this._lastMotionStop = null;
+          this.emit('motion_stop');
+        }
       }
-    } else {
-      // The sensor's state reverts to not detecting presence only a few seconds after no motion is detected.
-      // I need it more time to account for the fact that people may enter the room and remain still for an
-      // extended amount of time. For instance, when pooping. Start with 90 seconds and see how that works.
-      if (lastMotionStop && ((Date.now() - lastMotionStop) >= 90000)) {
-        debug('It has been about 90 seconds since motion has stopped. Emit motion stop.');
-        lastMotionStop = null;
-        emitter.emit('motion_stop');
-      }
-    }
-  }, 2000);
-
-  return emitter;
+    }, hueMotionPollingInterval);
+    return this; 
+  }
 }
-
 module.exports = Sensor;

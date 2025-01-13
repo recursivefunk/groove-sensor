@@ -16,7 +16,7 @@ const {
   const track = randomTrack(trackChoices);
   const system = Sonos();
   const node = await chooseSystemNode(system);
-  const sensor = await Sensor({ ...hue });
+  const sensor = new Sensor({ ...hue });
   let nowPlaying;
   let isPlaying = false;
 
@@ -25,25 +25,31 @@ const {
   // When we sense motion, if the current device isn't already playing, start playing the randomly chosen
   // track and print the album info in the terminal. Then take the remaining tracks and add them to the
   // queue.
-  sensor.on('motion_start', async () => {
-    log.debug('Motion started');
-    if (!isPlaying) {
-      nowPlaying = await system.playSpotifyTrack(track);
-      printNowPlaying(nowPlaying);
-      isPlaying = true;
-      // Queue up the remaining tracks
-      const remainingTracks = buildPlayQueue({ tracks: trackChoices, currentTrack: track });
-      await system.queueAll(remainingTracks);
-    }
-  });
-
-  // When there has been no motion for 90-ish seconds, stop playback
-  sensor.on('motion_stop', async () => {
-    log.debug('Motion stopped');
-    await system.stopPlayback();
-    await system.clearQueue();
-    isPlaying = false;
-  });
+  await sensor
+    .on('motion_start', async () => {
+      log.debug('Motion started');
+      if (!isPlaying) {
+        nowPlaying = await system.playSpotifyTrack(track);
+        printNowPlaying(nowPlaying);
+        isPlaying = true;
+        // Queue up the remaining tracks
+        const remainingTracks = buildPlayQueue({ tracks: trackChoices, currentTrack: track });
+        await system.queueAll(remainingTracks);
+      }
+    })
+    // When there has been no motion for 90-ish seconds, stop playback
+    .on('motion_stop', async () => {
+      log.debug('Motion stopped');
+      await system.stopPlayback();
+      await system.clearQueue();
+      isPlaying = false;
+    })
+    .on('error', err => {
+      log.error(err);
+      process.exit(1);
+    })
+    // Start listening for motion
+    .monitor();
 
   process.on('exit', async () => {
     await system.stopPlayback();
