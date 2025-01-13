@@ -1,6 +1,9 @@
 # Groove Sensor 
 
 ![alt text](./img/groove-sensor-logo.svg)
+<p align="center">
+  <img src="./img/sonos-hue.png" alt="sonos-hue" width="400"/>
+</p>
 
 I have a newly rentovated guest bathroom in my home. The plan is to setup a motion detector and put a sonos speaker in there. When someone enters the bathroom to handle business, they'll hear music based on a "vibe" (most likely hits from the 80s, sorry kids!) I've chosen ahead of time.
 
