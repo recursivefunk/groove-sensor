@@ -43,7 +43,7 @@ The result should be something like this:
 
 | Environment Variable    | Type    | Description                                        | Required | Default |
 | :---------------------- | :------ | :------------------------------------------------- | :------: | :-----: |
-| SONOS_DISCOVERY_TIMEOUT | String  | Timeout (seconds) for the device discovery process | No       | `5`     |
+| SONOS_DISCOVERY_TIMEOUT | Number  | Timeout (seconds) for the device discovery process | No       | `5`     |
 | HUE_BRIDGE_IP           | String  | IP Address of your Hugh Philips bridge device      | Yes      ||
 | HUE_USERNAME            | String  | Newly created username to connect to the bridge    | Yes      ||
 | HUE_SENSOR_ID           | String  | Device ID for the target Hue motion sensor         | Yes      ||
