@@ -79,14 +79,14 @@ function randomTrack (items) {
   return items[Math.floor(Math.random() * items.length)];
 }
 
-const camelize = (str) => {
+function camelize (str) {
   return str.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
     return index === 0 ? word.toLowerCase() : word.toUpperCase();
   })
     .replace(/\s+/g, '')
     .replace(/'/g, '')
     .replace(/’/g, '');
-};
+}
 
 module.exports = {
   buildPlayQueue,

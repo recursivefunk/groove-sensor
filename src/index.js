@@ -1,4 +1,6 @@
 const process = require('node:process');
+const { isIP } = require('net');
+const env = require('good-env');
 const Sonos = require('./lib/sonos');
 const Sensor = require('./lib/sensor');
 const { hue } = require('./lib/config');
@@ -10,6 +12,14 @@ const {
   printNowPlaying,
   randomTrack
 } = require('./lib/utils');
+const ipOk = str => isIP(str) === 4 || isIP(str) === 6;
+
+// Ensure all the required environemnt variables are present
+env.assert(
+  { 'HUE_BRIDGE_IP': { type: 'string', ok: ipOk }},
+  'HUE_USERNAME',
+  'HUE_SENSOR_ID',
+);
 
 (async function () {
   const trackChoices = await chooseVibe();
