@@ -5,8 +5,8 @@
   <img src="./img/logos.png" alt="sonos-hue" width="400"/>
 </p>
 
-[![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg)](https://github.com/standard/semistandard)
 ![workflow](https://github.com/recursivefunk/groove-sensor/actions/workflows/ci.yml/badge.svg)
+[![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg)](https://github.com/standard/semistandard)
 
 To hook this up, you'll need a Sonos speaker hooked up to your wifi and a Hue Philips motion sensor. To get the motion sensor working you'll also need a Hue Philips bridge and motion sensor setup. Both the Hue and Sonos systems should be connected to the same wifi network. This app runs locally on your network, so it's not really meant to run indefinitely unless you have maybe a dedicated box or run this in a container in the background. I don't plan on doing that, but if you want to make a PR to enable that, I'd welcome the contribution. Lastly, I recommend syncing your Spotify and Sonos accounts. More on Spotify below.
 
