@@ -47,12 +47,12 @@ The result should be something like this:
 
 | Environment Variable    | Type    | Description                                        | Required | Default |
 | :---------------------- | :------ | :------------------------------------------------- | :------: | :-----: |
-| SONOS_DISCOVERY_TIMEOUT | Number  | Timeout (seconds) for the device discovery process | No       | `5`     |
 | HUE_BRIDGE_IP           | String  | IP Address of your Hugh Philips bridge device      | Yes      ||
 | HUE_USERNAME            | String  | Newly created username to connect to the bridge    | Yes      ||
 | HUE_SENSOR_ID           | String  | Device ID for the target Hue motion sensor         | Yes      ||
 | HUE_MOTION_STOP_BUFFER  | Number  | How long to wait (seconds) after motion stops to emit the `motion_stop` event | No |`90`|
 | HUE_MOTION_POLLING_INTERVAL | Number  | How long to wait (seconds) in between sensor state polls | No |`2`|
+| SONOS_DISCOVERY_TIMEOUT | Number  | Timeout (seconds) for the device discovery process | No       | `5`     |
 
 ### Why Does This Exist?
 
