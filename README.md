@@ -1,8 +1,8 @@
 # Groove Sensor 
 
-![alt text](./img/groove-sensor-logo.svg)
+![groove sensor logo](./img/groove-sensor-logo.svg)
 <p align="center">
-  <img src="./img/logos.png" alt="sonos-hue" width="400"/>
+  <img src="./img/logos.png" alt="sonos-hue-spotify" width="400"/>
 </p>
 
 ![workflow](https://github.com/recursivefunk/groove-sensor/actions/workflows/ci.yml/badge.svg)
@@ -53,6 +53,16 @@ The result should be something like this:
 | HUE_MOTION_STOP_BUFFER  | Number  | How long to wait (seconds) after motion stops to emit the `motion_stop` event | No |`90`|
 | HUE_MOTION_POLLING_INTERVAL | Number  | How long to wait (seconds) in between sensor state polls | No |`2`|
 | SONOS_DISCOVERY_TIMEOUT | Number  | Timeout (seconds) for the device discovery process | No       | `5`     |
+
+## Setup and Run
+Once you're environment variables are setup
+
+```sh
+$ npm install
+$ npm start
+```
+
+![demo](./img/demo.gif)
 
 ### Why Does This Exist?
 

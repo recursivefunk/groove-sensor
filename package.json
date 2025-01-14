@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Coming soon\" && exit 0",
     "lint": "semistandard src/**/*.js",
-    "format": "semistandard --fix src/**/*.js"
+    "format": "semistandard --fix src/**/*.js",
+    "start": "node src/index.js"
   },
   "author": "Johnny Austin <hi@johnny.email>",
   "license": "MIT",
