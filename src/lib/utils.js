@@ -6,6 +6,7 @@ const {
   eightiesTrackIds,
   jazzTrackIds
 } = require('./config');
+const foo = "bar";
 /*
  * @description Builds a queue of tracks to play by just returning the current moodlist exluding the current track
  */
