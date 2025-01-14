@@ -1,0 +1,22 @@
+name: Groove Sensor CI
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: 22.12.0
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Tests
+        run: npm run test
+        env:
+          DEPLOY_ENV: 'test'
