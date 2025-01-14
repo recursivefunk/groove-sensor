@@ -7,11 +7,6 @@
     "lint": "semistandard src/**/*.js",
     "format": "semistandard --fix src/**/*.js"
   },
-  "pre-commit": [
-    "format",
-    "lint",
-    "test"
-  ],
   "author": "Johnny Austin <hi@johnny.email>",
   "license": "MIT",
   "description": "",
@@ -25,7 +20,6 @@
     "terminal-image": "^3.1.1"
   },
   "devDependencies": {
-    "@fastify/pre-commit": "^2.2.0",
     "nyc": "15.1.0",
     "semistandard": "*",
     "tape": "5.5.3"
