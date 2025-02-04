@@ -79,7 +79,7 @@ module.exports = {
     },
     {
       // "Stockholm Love" - Malthilda June
-      uri: 'https://open.spotify.com/track/3tNuzvJ5z4rN7GPZoWxQdk?si=f558bcc70d2f4c7a',
+      uri: 'spotify:track:3tNuzvJ5z4rN7GPZoWxQdk',
       bestVolume: '25'
     },
     {
