@@ -7,6 +7,10 @@ jest.mock('good-env', () => ({
     if (key === 'HUE_MOTION_STOP_BUFFER') return 90;
     if (key === 'HUE_MOTION_POLLING_INTERVAL') return 2;
     return defaultValue;
+  }),
+  get: jest.fn().mockImplementation((key) => {
+    if (key === 'NODE_ENV') return 'TEST';
+    return undefined;
   })
 }));
 
@@ -23,9 +27,15 @@ const mockBridge = jest.fn().mockReturnValue({
   user: mockUser
 });
 
-jest.mock('jshue', () => ({
-  bridge: mockBridge
-}));
+const mockBridgeFn = jest.fn().mockReturnValue({
+  user: mockUser
+});
+
+jest.mock('jshue', () => {
+  return jest.fn().mockReturnValue({
+    bridge: mockBridgeFn
+  });
+});
 
 // Mock log
 jest.mock('../../src/lib/log.js', () => ({
@@ -36,24 +46,46 @@ jest.mock('../../src/lib/log.js', () => ({
 import env from 'good-env';
 import jsHue from 'jshue';
 import log from '../../src/lib/log.js';
-import Sensor from '../../src/lib/sensor.js';
 
-describe.skip('sensor.js', () => {
+describe('sensor.js', () => {
   let sensor;
+  let Sensor;
   const mockConfig = {
     bridgeIp: '192.168.1.100',
     sensorId: '123',
     username: 'testuser'
   };
+  
+  // Synchronous setInterval mock for testing
+  function createManualInterval() {
+    let callback;
+    return {
+      setInterval: (fn, interval) => {
+        callback = fn;
+        return 1;
+      },
+      tick: async () => {
+        if (callback) await callback();
+      }
+    };
+  }
 
-  beforeEach(() => {
+  let manualInterval;
+
+  // Helper to flush all pending promises
+  async function flushPromises() {
+    for (let i = 0; i < 5; i++) {
+      await Promise.resolve();
+      await new Promise(r => setImmediate(r));
+    }
+  }
+
+  beforeEach(async () => {
     jest.clearAllMocks();
-    jest.useFakeTimers();
-    sensor = new Sensor(mockConfig);
-  });
-
-  afterEach(() => {
-    jest.useRealTimers();
+    jest.resetModules();
+    Sensor = (await import('../../src/lib/sensor.js')).default;
+    manualInterval = createManualInterval();
+    sensor = new Sensor({ ...mockConfig, setIntervalFn: manualInterval.setInterval });
   });
 
   describe('constructor', () => {
@@ -66,7 +98,7 @@ describe.skip('sensor.js', () => {
     });
 
     it('should set up bridge and user correctly', () => {
-      expect(mockBridge).toHaveBeenCalledWith('192.168.1.100');
+      expect(mockBridgeFn).toHaveBeenCalledWith('192.168.1.100');
       expect(mockUser).toHaveBeenCalledWith('testuser');
     });
   });
@@ -74,12 +106,13 @@ describe.skip('sensor.js', () => {
   describe('monitor', () => {
     it('should start monitoring the sensor', async () => {
       const monitorPromise = sensor.monitor();
-      expect(sensor._lastKnownState).toBe(false);
       await monitorPromise;
+      expect(sensor._lastKnownState).toBe(false);
       expect(mockGetSensor).toHaveBeenCalledWith('123');
     });
 
     it('should emit motion_start when presence changes to true', async () => {
+      jest.setTimeout(10000);
       const motionStartSpy = jest.fn();
       sensor.on('motion_start', motionStartSpy);
 
@@ -94,8 +127,8 @@ describe.skip('sensor.js', () => {
       });
 
       await sensor.monitor();
-      jest.advanceTimersByTime(2000); // Advance past polling interval
-
+      await manualInterval.tick();
+      await flushPromises();
       expect(motionStartSpy).toHaveBeenCalled();
     });
 
@@ -114,9 +147,11 @@ describe.skip('sensor.js', () => {
       });
 
       await sensor.monitor();
-      jest.advanceTimersByTime(2000); // Advance past polling interval
-      jest.advanceTimersByTime(90000); // Advance past buffer period
-
+      await manualInterval.tick(); // First interval: presence changes to false
+      // Simulate time passage for buffer
+      sensor._lastMotionStop = Date.now() - 90000;
+      await manualInterval.tick(); // Second interval: should emit motion_stop
+      await flushPromises();
       expect(motionStopSpy).toHaveBeenCalled();
     });
 
@@ -124,11 +159,14 @@ describe.skip('sensor.js', () => {
       const errorSpy = jest.fn();
       sensor.on('error', errorSpy);
 
+      mockGetSensor.mockResolvedValueOnce({
+        state: { presence: false }
+      });
       mockGetSensor.mockRejectedValueOnce(new Error('Test error'));
 
       await sensor.monitor();
-      jest.advanceTimersByTime(2000); // Advance past polling interval
-
+      await manualInterval.tick();
+      await flushPromises();
       expect(errorSpy).toHaveBeenCalledWith(expect.any(Error));
     });
   });
