@@ -1,17 +1,18 @@
-const process = require('node:process');
-const { isIP } = require('net');
-const env = require('good-env');
-const Sonos = require('./lib/sonos');
-const Sensor = require('./lib/sensor');
-const { hue } = require('./lib/config');
-const log = require('./lib/log');
-const {
+import process from 'node:process';
+import { isIP } from 'net';
+import env from 'good-env';
+import Sonos from './lib/sonos.js';
+import Sensor from './lib/sensor.js';
+import { hue } from './lib/config.js';
+import log from './lib/log.js';
+import {
   buildPlayQueue,
   chooseSystemNode,
   chooseVibe,
   printNowPlaying,
   randomTrack
-} = require('./lib/utils');
+} from './lib/utils.js';
+
 const ipOk = str => isIP(str) === 4 || isIP(str) === 6;
 
 // Ensure all the required environemnt variables are present

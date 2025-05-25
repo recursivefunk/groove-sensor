@@ -1,16 +1,16 @@
-const { default: terminalImage } = require('terminal-image');
-const Table = require('cli-table');
-const { got } = require('got');
-const { select } = require('@inquirer/prompts');
-const {
+import terminalImage from 'terminal-image';
+import Table from 'cli-table';
+import { got } from 'got';
+import { select } from '@inquirer/prompts';
+import {
   eightiesTrackIds,
   jazzTrackIds
-} = require('./config');
+} from './config.js';
 
 /*
  * @description Builds a queue of tracks to play by just returning the current moodlist exluding the current track
  */
-function buildPlayQueue ({ tracks, currentTrack }) {
+export function buildPlayQueue ({ tracks, currentTrack }) {
   const remainingTracks = tracks.filter((t) => t.uri !== currentTrack.uri);
 
   if (remainingTracks.length === 0) {
@@ -23,7 +23,7 @@ function buildPlayQueue ({ tracks, currentTrack }) {
 /*
  * @description Prompt the user to choose which device to setup the playback
  */
-async function chooseSystemNode (system) {
+export async function chooseSystemNode (system) {
   const discoveredNodes = await system.discoverNodes();
   const choices = discoveredNodes
     .map((node) => ({
@@ -48,7 +48,7 @@ async function chooseSystemNode (system) {
  *  3. Right click on the track
  *  4. Choose 'Share > Copy Song Link' and the track ID will be embedded in the link. Be sure to format it correctly when you paste it in the config
  */
-async function chooseVibe () {
+export async function chooseVibe () {
   const choice = await select({
     message: 'Aw yea! What type of mood would you like to set?',
     choices: [
@@ -60,7 +60,7 @@ async function chooseVibe () {
   return choice;
 }
 
-async function printNowPlaying ({ title, artist, album, albumArtURL }) {
+export async function printNowPlaying ({ title, artist, album, albumArtURL }) {
   const body = await got(albumArtURL).buffer();
   console.log(await terminalImage.buffer(body, { width: 100 }));
   console.log('\n\n');
@@ -75,24 +75,15 @@ async function printNowPlaying ({ title, artist, album, albumArtURL }) {
   console.log('\n\n');
 }
 
-function randomTrack (items) {
+export function randomTrack (items) {
   return items[Math.floor(Math.random() * items.length)];
 }
 
-function camelize (str) {
+export function camelize (str) {
   return str.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
     return index === 0 ? word.toLowerCase() : word.toUpperCase();
   })
     .replace(/\s+/g, '')
     .replace(/'/g, '')
-    .replace(/’/g, '');
+    .replace(/'/g, '');
 }
-
-module.exports = {
-  buildPlayQueue,
-  camelize,
-  chooseSystemNode,
-  chooseVibe,
-  printNowPlaying,
-  randomTrack
-};

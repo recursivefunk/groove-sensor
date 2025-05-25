@@ -1,8 +1,9 @@
-const env = require('good-env');
+import env from 'good-env';
+
 const isProd = env.get('NODE_ENV') === 'PRODUCTION';
 const noOp = function () {};
 
-module.exports = {
+export default {
   info: console.log,
   debug: (isProd ? noOp : console.debug),
   warn: console.warn,
