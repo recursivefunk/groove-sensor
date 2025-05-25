@@ -1,11 +1,11 @@
-const { Sonos, AsyncDeviceDiscovery } = require('sonos');
-const env = require('good-env');
-const log = require('./log');
-const { camelize } = require('./utils');
-const discovery = new AsyncDeviceDiscovery();
+import { Sonos, AsyncDeviceDiscovery } from 'sonos';
+import env from 'good-env';
+import log from './log.js';
+import { camelize } from './utils.js';
+
 const sonosDiscoveryTimeout = env.num('SONOS_DISCOVERY_TIMEOUT', 5) * 1000;
 
-function init () {
+export default function () {
   let _nodes = {};
   let _targetDevice;
 
@@ -42,6 +42,7 @@ function init () {
 
     async discoverNodes () {
       log.info('\n---------- Hold tight, finding your Sonos devices... -------------\n');
+      const discovery = new AsyncDeviceDiscovery();
       const sonosDevices = await discovery.discoverMultiple({ timeout: sonosDiscoveryTimeout });
       const nodesArr = await Promise.all(sonosDevices.map(async (device) => {
         const name = await device.getName();
@@ -106,5 +107,3 @@ function init () {
 
   return _instance;
 }
-
-module.exports = init;

@@ -1,9 +1,10 @@
 {
   "name": "groove-sensor",
   "version": "0.0.1",
+  "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Coming soon\" && exit 0",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "lint": "semistandard src/**/*.js",
     "format": "semistandard --fix src/**/*.js",
     "start": "node src/index.js"
@@ -21,6 +22,7 @@
     "terminal-image": "^3.1.1"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
     "nyc": "15.1.0",
     "semistandard": "*",
     "tape": "5.5.3"

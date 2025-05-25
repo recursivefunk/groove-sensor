@@ -1,7 +1,9 @@
-const EventEmitter = require('node:events');
-const env = require('good-env');
-const jsHue = require('jshue');
-const { debug } = require('./log');
+import EventEmitter from 'node:events';
+import env from 'good-env';
+import jsHue from 'jshue';
+import log from './log.js';
+
+const { debug } = log;
 const hue = jsHue();
 const hueMotionStopBuff = env.num('HUE_MOTION_STOP_BUFFER', 90) * 1000;
 const hueMotionPollingInterval = env.num('HUE_MOTION_POLLING_INTERVAL', 2) * 1000;
@@ -10,7 +12,7 @@ const hueMotionPollingInterval = env.num('HUE_MOTION_POLLING_INTERVAL', 2) * 100
  * @description Detect a Hue motion sensor, poll it for chances in presence state and emit motion start or stop
  * accordingly. Return an EventEmitter which will be the channel over which the client is notifed of state changes.
  */
-class Sensor extends EventEmitter {
+export default class Sensor extends EventEmitter {
   constructor ({ bridgeIp, sensorId, username }) {
     super();
     EventEmitter.call(this);
@@ -60,4 +62,3 @@ class Sensor extends EventEmitter {
     return this;
   }
 }
-module.exports = Sensor;
