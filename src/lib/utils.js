@@ -1,7 +1,6 @@
 import terminalImage from 'terminal-image';
 import Table from 'cli-table';
 import { got } from 'got';
-import { select } from '@inquirer/prompts';
 import {
   eightiesTrackIds,
   jazzTrackIds
@@ -24,6 +23,7 @@ export function buildPlayQueue ({ tracks, currentTrack }) {
  * @description Prompt the user to choose which device to setup the playback
  */
 export async function chooseSystemNode (system) {
+  const { select } = await import('@inquirer/prompts');
   const discoveredNodes = await system.discoverNodes();
   const choices = discoveredNodes
     .map((node) => ({
@@ -49,6 +49,7 @@ export async function chooseSystemNode (system) {
  *  4. Choose 'Share > Copy Song Link' and the track ID will be embedded in the link. Be sure to format it correctly when you paste it in the config
  */
 export async function chooseVibe () {
+  const { select } = await import('@inquirer/prompts');
   const choice = await select({
     message: 'Aw yea! What type of mood would you like to set?',
     choices: [
@@ -80,10 +81,8 @@ export function randomTrack (items) {
 }
 
 export function camelize (str) {
-  return str.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
-    return index === 0 ? word.toLowerCase() : word.toUpperCase();
-  })
-    .replace(/\s+/g, '')
-    .replace(/'/g, '')
-    .replace(/'/g, '');
+  return str
+    .replace(/[-\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '') // capitalize after dash/space
+    .replace(/'/g, '') // remove apostrophes
+    .replace(/^./, c => c.toLowerCase()); // lowercase first letter
 }

@@ -96,15 +96,9 @@ describe('sonos.js', () => {
   describe('getDevice', () => {
     beforeEach(async () => {
       await sonosInstance.discoverNodes();
-      // Debug: print known nodes after discovery
-      // eslint-disable-next-line no-console
-      console.log('Known nodes after discovery:', sonosInstance.getKnownNodes());
     });
 
     it('should return device for valid key', async () => {
-      // Debug: print keys in _nodes
-      // eslint-disable-next-line no-console
-      console.log('Device for key livingRoom:', sonosInstance.getDevice({ key: 'livingRoom' }));
       const device = sonosInstance.getDevice({ key: 'livingRoom' });
       expect(device).toBeDefined();
       expect(device.name).toBe('Living Room');
